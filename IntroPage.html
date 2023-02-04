@@ -3,7 +3,14 @@
     <style>
       .container {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px;
+      }
+      
+      .boxes {
+        display: flex;
+        flex-direction: row;
       }
       
       .box {
@@ -26,19 +33,21 @@
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="box" id="box1">1</div>
-      <div class="box" id="box2">2</div>
-      <div class="box" id="box3">3</div>
-      <div class="box" id="box4">4</div>
-      <div class="box" id="box5">5</div>
-    </div>
-    <div class="container">
-      <div class="box" id="drop1"></div>
-      <div class="box" id="drop2"></div>
-      <div class="box" id="drop3"></div>
-      <div class="box" id="drop4"></div>
-      <div class="box" id="drop5"></div>
+    <div class="boxes">
+      <div class="container">
+        <div class="box" id="box1">1</div>
+        <div class="box" id="box2">2</div>
+        <div class="box" id="box3">3</div>
+        <div class="box" id="box4">4</div>
+        <div class="box" id="box5">5</div>
+      </div>
+      <div class="container">
+        <div class="box" id="drop3"></div>
+        <div class="box" id="drop2"></div>
+        <div class="box" id="drop4"></div>
+        <div class="box" id="drop1"></div>
+        <div class="box" id="drop5"></div>
+      </div>
     </div>
     <div class="feedback" id="feedback"></div>
     
@@ -48,7 +57,8 @@
       let isOrderCorrect = false;
       
       boxes.forEach(box => {
-        box.addEventListener('dragstart', () => {
+        box.addEventListener('dragstart', event => {
+          event.dataTransfer.setData("text/plain", event.target.id);
           box.style.backgroundColor = 'yellow';
         });
         
@@ -71,35 +81,38 @@
         });
         
         box.addEventListener('drop', event => {
-          if (event.target.className === 'box') {
-            event.target.style.backgroundColor = 'lightblue';
-            event.target.innerHTML = box.innerHTML;
-            box.innerHTML = '';
-            currentDroppable = null;
-            
-            checkOrder();
-          }
+          event.preventDefault();
+          const id = event.dataTransfer.getData("text/plain");
+          const dragBox = document.querySelector(`#${id}`);
+          if (event.target.className === 'box
+          currentDroppable.innerHTML = dragBox.innerHTML;
+          dragBox.innerHTML = '';
+          currentDroppable.style.backgroundColor = 'lightblue';
+          currentDroppable = null;
+          
+          checkOrder();
         });
       });
       
       function checkOrder() {
         const dropBoxes = document.querySelectorAll('.container:last-child .box');
         let orderCorrect = true;
+        
         for (let i = 0; i < dropBoxes.length; i++) {
-            if (dropBoxes[i].innerHTML !== (i + 1).toString()) {
-                orderCorrect = false;
-                break;
-            }
+          if (dropBoxes[i].innerHTML !== (i + 3).toString()) {
+            orderCorrect = false;
+            break;
+          }
         }
-
+        
         if (orderCorrect) {
-            isOrderCorrect = true;
-            document.querySelector('#feedback').innerHTML = '';
+          isOrderCorrect = true;
+          document.querySelector('#feedback').innerHTML = '';
         } else {
-            isOrderCorrect = false;
-            document.querySelector('#feedback').innerHTML = 'Order is incorrect';
+          isOrderCorrect = false;
+          document.querySelector('#feedback').innerHTML = 'Order is incorrect';
         }
-    }
-</script>
+      }
+    </script>
   </body>
 </html>
