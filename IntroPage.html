@@ -1,0 +1,105 @@
+<html>
+  <head>
+    <style>
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      
+      .box {
+        width: 100px;
+        height: 100px;
+        background-color: lightblue;
+        border: 1px solid black;
+        text-align: center;
+        line-height: 100px;
+        cursor: move;
+        user-select: none;
+      }
+      
+      .feedback {
+        margin-top: 20px;
+        font-size: 18px;
+        color: red;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="box" id="box1">1</div>
+      <div class="box" id="box2">2</div>
+      <div class="box" id="box3">3</div>
+      <div class="box" id="box4">4</div>
+      <div class="box" id="box5">5</div>
+    </div>
+    <div class="container">
+      <div class="box" id="drop1"></div>
+      <div class="box" id="drop2"></div>
+      <div class="box" id="drop3"></div>
+      <div class="box" id="drop4"></div>
+      <div class="box" id="drop5"></div>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    
+    <script>
+      const boxes = document.querySelectorAll('.box');
+      let currentDroppable = null;
+      let isOrderCorrect = false;
+      
+      boxes.forEach(box => {
+        box.addEventListener('dragstart', () => {
+          box.style.backgroundColor = 'yellow';
+        });
+        
+        box.addEventListener('dragend', () => {
+          box.style.backgroundColor = 'lightblue';
+        });
+        
+        box.addEventListener('dragenter', event => {
+          if (event.target.className === 'box') {
+            event.target.style.backgroundColor = 'lightgreen';
+            currentDroppable = event.target;
+          }
+        });
+        
+        box.addEventListener('dragleave', event => {
+          if (event.target.className === 'box') {
+            event.target.style.backgroundColor = 'lightblue';
+            currentDroppable = null;
+          }
+        });
+        
+        box.addEventListener('drop', event => {
+          if (event.target.className === 'box') {
+            event.target.style.backgroundColor = 'lightblue';
+            event.target.innerHTML = box.innerHTML;
+            box.innerHTML = '';
+            currentDroppable = null;
+            
+            checkOrder();
+          }
+        });
+      });
+      
+      function checkOrder() {
+        const dropBoxes = document.querySelectorAll('.container:last-child .box');
+        let orderCorrect = true;
+        for (let i = 0; i < dropBoxes.length; i++) {
+            if (dropBoxes[i].innerHTML !== (i + 1).toString()) {
+                orderCorrect = false;
+                break;
+            }
+        }
+
+        if (orderCorrect) {
+            isOrderCorrect = true;
+            document.querySelector('#feedback').innerHTML = '';
+        } else {
+            isOrderCorrect = false;
+            document.querySelector('#feedback').innerHTML = 'Order is incorrect';
+        }
+    }
+</script>
+  </body>
+</html>
