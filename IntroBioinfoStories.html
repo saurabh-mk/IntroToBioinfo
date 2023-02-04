@@ -15,7 +15,6 @@
     <script>
       function readStory(storyId) {
         const storyText = document.getElementById(storyId).innerText;
-        alert(storyText)
         const speech = new SpeechSynthesisUtterance(storyText);
         window.speechSynthesis.speak(speech);
       }
