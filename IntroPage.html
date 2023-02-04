@@ -1,113 +1,98 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <style>
-      .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 45%;
-        height: 500px;
-        border: 1px solid black;
-        margin: 20px;
-        overflow-y: scroll;
-      }
-      
-      .box {
-        width: 300px;
-        height: 70px;
-        background-color: powderblue;
-        border-radius: 15px;
-        text-align: center;
-        padding-top: 20px;
-        margin-bottom: 20px;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- left container for draggable boxes -->
-    <div class="container" id="draggableContainer">
-      <div class="box" id="box1">1</div>
-      <div class="box" id="box2">2</div>
-      <div class="box" id="box3">3</div>
-      <div class="box" id="box4">4</div>
-      <div class="box" id="box5">5</div>
-    </div>
+<head>
+  <style>
+    .container {
+      width: 500px;
+      height: 400px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+    .box {
+      width: 200px;
+      height: 100px;
+      margin: 10px;
+      border: 1px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .drop-container {
+      width: 500px;
+      height: 400px;
+      border: 2px solid black;
+      display: flex;
+      flex-wrap: wrap;
+      height: 100px;
+      margin: 10px;
+      border: 1px dotted black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background-color: #ccc;
+    }
+  </style>
+  <script>
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
     
-    <!-- right container for droppable boxes -->
-    <div class="container" id="droppableContainer">
-    </div>
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
     
-    <!-- feedback section -->
-    <div id="feedback">
-    </div>
+    function drop(ev) {
+      ev.preventDefault();
+      var data = ev.dataTransfer.getData("text");
+      ev.target.appendChild(document.getElementById(data));
+    }
+  </script>
+</head>
+<body>
+  <!-- Container 1 -->
+  <div class="container">
+    <div class="box" id="box1">Box 1</div>
+    <div class="box" id="box2">Box 2</div>
+    <div class="box" id="box3">Box 3</div>
+    <div class="box" id="box4">Box 4</div>
+    <div class="box" id="box5">Box 5</div>
+  </div>
+  
+  <!-- Container 2 -->
+  <div class="drop-container" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <div class="empty-box" id="empty1"></div>
+    <div class="empty-box" id="empty2"></div>
+    <div class="empty-box" id="empty3"></div>
+    <div class="empty-box" id="empty4"></div>
+    <div class="empty-box" id="empty5"></div>
+  </div>
+  
+  <!-- Feedback -->
+  <script>
+    const boxOrder = ['box3', 'box2', 'box4', 'box1', 'box5'];
+    const boxes = document.querySelectorAll('.box');
+    const dropContainer = document.querySelector('.drop-container');
     
-    <script>
-      // Get the boxes in an array
-      let boxes = document.querySelectorAll('.box');
-      
-      // shuffle the boxes array
-      function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-      }
-      
-      // shuffle boxes every time page is loaded
-      boxes = shuffle(Array.from(boxes));
-      
-      // add the shuffled boxes to the left container
-      boxes.forEach(function(box) {
-        document.querySelector('#draggableContainer').appendChild(box);
-      });
-      
-      // variables to store the current droppable and the current draggable
-      let currentDroppable = null;
-      let currentDraggable = null;
-      
-      // flag to store the order of the boxes
-      let isOrderCorrect = false;
-      
-      // loop through the boxes and add event listeners
-      boxes.forEach(function(dragBox) {
-        dragBox.addEventListener('dragstart', function() {
-          currentDraggable = dragBox;
-        });
-        
-        dragBox.addEventListener('dragend', function() {
-          currentDraggable = null;
-        });
-        
-        dragBox.addEventListener('dragover', function(event) {
-          event.preventDefault();
-        });
-        
-        dragBox.addEventListener('drop', function(event) {
-          event.preventDefault
-          if (currentDroppable === this) {
-            currentDroppable.appendChild(currentDraggable);
-            let droppableBoxes = document.querySelectorAll('#droppableContainer .box');
-            let correctOrder = [3, 2, 4, 1, 5];
-            let isOrderCorrect = true;
-            for (let i = 0; i < droppableBoxes.length; i++) {
-              if (droppableBoxes[i].textContent != correctOrder[i]) {
-                isOrderCorrect = false;
-                break;
-              }
-            }
-            let feedback = document.querySelector('#feedback');
-            if (isOrderCorrect) {
-              feedback.textContent = "Order is correct!";
-            } else {
-              feedback.textContent = "Order is incorrect.";
-            }
+    dropContainer.addEventListener('drop', function() {
+      let correctOrder = true;
+      for (let i = 0; i < boxes.length; i++) {
+        if (boxes[i].parentNode === dropContainer) {
+          if (boxes[i].id !== boxOrder[i]) {
+            correctOrder = false;
+            break;
           }
-        });
-      });
-    </script>
-  </body>
+        }
+      }
+      if (correctOrder) {
+        alert('The boxes are in the correct order!');
+      } else {
+        alert('The boxes are NOT in the correct order.');
+      }
+    });
+  </script>
+</body>
 </html>
