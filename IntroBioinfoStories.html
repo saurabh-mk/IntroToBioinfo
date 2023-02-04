@@ -1,13 +1,22 @@
-<h2 id="story1-heading">Story 1 <span onclick="readStory('story1-text')">&#128266;</span></h2>
-<p id="story1-text">Once upon a time long long ago.</p>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Read Story</title>
+  </head>
+  <body>
+    <h2 id="story1-heading">Story 1 <span onclick="readStory('story1-text')">&#128266;</span></h2>
+    <p id="story1-text">Once upon a time long long ago.</p>
 
-<h2 id="story2-heading">Story 2 <span onclick="readStory('story2-text')">&#128266;</span></h2>
-<p id="story2-text">Once upon a time long long ago.</p>
+    <h2 id="story2-heading">Story 2 <span onclick="readStory('story2-text')">&#128266;</span></h2>
+    <p id="story2-text">Once upon a time long long ago.</p>
 
-<script>
-  function readStory(storyId) {
-    const storyText = document.getElementById(storyId).innerText;
-    const speech = new SpeechSynthesisUtterance(storyText);
-    window.speechSynthesis.speak(speech);
-  }
-</script>
+    <script>
+      function readStory(storyId) {
+        const storyText = document.getElementById(storyId).innerText;
+        const speech = new SpeechSynthesisUtterance(storyText);
+        window.speechSynthesis.speak(speech);
+      }
+    </script>
+  </body>
+</html>
