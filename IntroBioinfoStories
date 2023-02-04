@@ -1,0 +1,19 @@
+<h2 id="story1-heading">Story 1 <span onclick="readStory1()">&#128266;</span></h2>
+<p id="story1-text">Once upon a time long long ago.</p>
+
+<h2 id="story2-heading">Story 2 <span onclick="readStory2()">&#128266;</span></h2>
+<p id="story2-text">Once upon a time long long ago.</p>
+
+<script>
+  function readStory1() {
+    const story1Text = document.getElementById("story1-text").innerText;
+    const speech = new SpeechSynthesisUtterance(story1Text);
+    window.speechSynthesis.speak(speech);
+  }
+
+  function readStory2() {
+    const story2Text = document.getElementById("story2-text").innerText;
+    const speech = new SpeechSynthesisUtterance(story2Text);
+    window.speechSynthesis.speak(speech);
+  }
+</script>
