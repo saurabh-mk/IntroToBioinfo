@@ -1,98 +1,63 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    .container {
-      width: 500px;
-      height: 400px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-    }
-    .box {
-      width: 200px;
-      height: 100px;
-      margin: 10px;
-      border: 1px solid black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
-    .drop-container {
-      width: 500px;
-      height: 400px;
-      border: 2px solid black;
-      display: flex;
-      flex-wrap: wrap;
-      height: 100px;
-      margin: 10px;
-      border: 1px dotted black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      background-color: #ccc;
-    }
-  </style>
-  <script>
-    function allowDrop(ev) {
-      ev.preventDefault();
-    }
-    
-    function drag(ev) {
-      ev.dataTransfer.setData("text", ev.target.id);
-    }
-    
-    function drop(ev) {
-      ev.preventDefault();
-      var data = ev.dataTransfer.getData("text");
-      ev.target.appendChild(document.getElementById(data));
-    }
-  </script>
-</head>
-<body>
-  <!-- Container 1 -->
-  <div class="container">
-    <div class="box" id="box1">Box 1</div>
-    <div class="box" id="box2">Box 2</div>
-    <div class="box" id="box3">Box 3</div>
-    <div class="box" id="box4">Box 4</div>
-    <div class="box" id="box5">Box 5</div>
-  </div>
+document.addEventListener('DOMContentLoaded', (event) => {
+
+  var dragSrcEl = null;
   
-  <!-- Container 2 -->
-  <div class="drop-container" ondrop="drop(event)" ondragover="allowDrop(event)">
-    <div class="empty-box" id="empty1"></div>
-    <div class="empty-box" id="empty2"></div>
-    <div class="empty-box" id="empty3"></div>
-    <div class="empty-box" id="empty4"></div>
-    <div class="empty-box" id="empty5"></div>
-  </div>
-  
-  <!-- Feedback -->
-  <script>
-    const boxOrder = ['box3', 'box2', 'box4', 'box1', 'box5'];
-    const boxes = document.querySelectorAll('.box');
-    const dropContainer = document.querySelector('.drop-container');
+  function handleDragStart(e) {
+    this.style.opacity = '0.4';
     
-    dropContainer.addEventListener('drop', function() {
-      let correctOrder = true;
-      for (let i = 0; i < boxes.length; i++) {
-        if (boxes[i].parentNode === dropContainer) {
-          if (boxes[i].id !== boxOrder[i]) {
-            correctOrder = false;
-            break;
-          }
-        }
-      }
-      if (correctOrder) {
-        alert('The boxes are in the correct order!');
-      } else {
-        alert('The boxes are NOT in the correct order.');
-      }
+    dragSrcEl = this;
+
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+  }
+
+  function handleDragOver(e) {
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+
+    e.dataTransfer.dropEffect = 'move';
+    
+    return false;
+  }
+
+  function handleDragEnter(e) {
+    this.classList.add('over');
+  }
+
+  function handleDragLeave(e) {
+    this.classList.remove('over');
+  }
+
+  function handleDrop(e) {
+    if (e.stopPropagation) {
+      e.stopPropagation(); // stops the browser from redirecting.
+    }
+    
+    if (dragSrcEl != this) {
+      dragSrcEl.innerHTML = this.innerHTML;
+      this.innerHTML = e.dataTransfer.getData('text/html');
+    }
+    
+    return false;
+  }
+
+  function handleDragEnd(e) {
+    this.style.opacity = '1';
+    
+    items.forEach(function (item) {
+      item.classList.remove('over');
     });
-  </script>
-</body>
-</html>
+  }
+  
+  
+  let items = document.querySelectorAll('.container .box');
+  items.forEach(function(item) {
+    item.addEventListener('dragstart', handleDragStart, false);
+    item.addEventListener('dragenter', handleDragEnter, false);
+    item.addEventListener('dragover', handleDragOver, false);
+    item.addEventListener('dragleave', handleDragLeave, false);
+    item.addEventListener('drop', handleDrop, false);
+    item.addEventListener('dragend', handleDragEnd, false);
+  });
+});
