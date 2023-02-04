@@ -13,6 +13,7 @@
 
     <script>
       function readStory(storyId) {
+        alert("Working!")
         const storyText = document.getElementById(storyId).innerText;
         const speech = new SpeechSynthesisUtterance(storyText);
         window.speechSynthesis.speak(speech);
