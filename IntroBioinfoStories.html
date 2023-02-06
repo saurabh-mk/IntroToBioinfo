@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Read Story</title>
+  </head>
+  <body>
+    <h2 id="story1-heading">Story 1 <span onclick="readStory('story1-text')">&#128266;</span></h2>
+    <p id="story1-text">Imagine a patient has come to a hospital with a terrible fever and cough which is not going down. While this patient is getting treated, many other close contacts of the person also start coming in with similar symptoms. Tests for Covid and many other pathogens are negative. How could we find out what’s going on? One way to find out is to take some blood/saliva/cough samples and see if you can grow any pathogen out of them in the lab, then try to observe it under a microscope. Say, the pathologists looking in the microscope can see some virus-like particles. But they don’t know which virus it could be. How can they find out? Can you help them by deciding a strategy?
+</p>
+
+    <h2 id="story2-heading">Story 2 <span onclick="readStory('story2-text')">&#128266;</span></h2>
+    <p id="story2-text">Some villagers in an area neighboring the Bandipur forest have cited a black leopard! Black leopards are a rarity. The villagers immediately informed the forest officers and ecologists. The ecologists and their scientist friends want to understand why these leopards are different from the usual ones with spotted patterns. After reading some research articles, they found that a similar case of black tigers was reported in the Similipal forest in Odisha. When the scientist in that case compared black tigers to the usual yellow-black striped tigers, they found slight differences in a protein called Taqpep. How will you go about finding if differences in the same protein are responsible for black leopards?</p>
+
+    <script>
+      function readStory(storyId) {
+        const storyText = document.getElementById(storyId).innerText;
+        const speech = new SpeechSynthesisUtterance(storyText);
+        window.speechSynthesis.speak(speech);
+      }
+    </script>
+  </body>
+</html>
